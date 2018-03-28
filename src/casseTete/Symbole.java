@@ -1,9 +1,12 @@
 package casseTete;
 
 public enum Symbole {
-
-	etoile,
-	carre,
-	triangle;
+	
+	VIDE,
+	ETOILE,
+	CARRE,
+	TRIANGLE;
+	
+	
 	
 }
