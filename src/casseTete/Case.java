@@ -3,14 +3,49 @@ package casseTete;
 public class Case {
 	
 	Symbole symb;
-	Lien lien;
-	int ligne;
-	int colonne;
 	
 	public Case() {
 		this.symb = Symbole.VIDE;
 		this.lien = Lien.CASEVIDE;
 		
 	}
+	
+	public Symbole getSymb() {
+		return symb;
+	}
+
+	public void setSymb(Symbole symb) {
+		this.symb = symb;
+	}
+
+	public Lien getLien() {
+		return lien;
+	}
+
+	public void setLien(Lien lien) {
+		this.lien = lien;
+	}
+
+	public int getLigne() {
+		return ligne;
+	}
+
+	public void setLigne(int ligne) {
+		this.ligne = ligne;
+	}
+
+	public int getColonne() {
+		return colonne;
+	}
+
+	public void setColonne(int colonne) {
+		this.colonne = colonne;
+	}
+
+	Lien lien;
+	int ligne;
+	int colonne;
+	
+	
 	
 }
