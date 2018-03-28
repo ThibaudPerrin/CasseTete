@@ -2,8 +2,13 @@ package casseTete;
 
 public enum Lien {
 	
-	etoile,
-	carre,
-	triangle;
+	TRAITHORIZONTAL,
+	TRAITVERTICAL,
+	ANGLESUPGAUCHE,
+	ANGLESUPDROIT,
+	ANGLEINFGAUCHE,
+	ANGLEINFDROIT,
+	CASEVIDE;
+	
 
 }
