@@ -13,14 +13,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.image.Image ;
-import javafx.scene.image.ImageView;
 
 public class MainCasseTete extends Application {
 	
@@ -40,31 +36,32 @@ public class MainCasseTete extends Application {
 
         // permet de placer les diffrents boutons dans une grille
         GridPane gPane = new GridPane();
-        gPane.setPrefSize(1000, 1000);
-
+        gPane.setPrefSize(500, 500);
         gPane.setAlignment(Pos.CENTER);
-
-        Text affichage = new Text("Appli");
-        affichage.setFont(Font.font("Verdana", 30));
         
+        //Titre
+        Text affichage = new Text("Casse TETE");
+        affichage.setFont(Font.font("Verdana", 30));
         affichage.setFill(Color.WHITE);
         border.setTop(affichage);
         border.setAlignment(affichage,Pos.CENTER);
-        g.getTab()[1][2].setSymb(Symbole.ETOILE);
+        
+        //Initialisation
         for(int i = 0; i < g.getLongueur(); i++) {
         	for(int j = 0; j < g.getLargeur(); j++) {
-        		CasePane p = new CasePane(g.getTab()[i][j].getSymb());
+        		CasePane p = new CasePane(g.getTab()[i][j]);
         		gPane.add(p, i, j);
         	}
         }
         
         
-        gPane.setGridLinesVisible(true);
         
+        //Options
+        gPane.setGridLinesVisible(true);
         border.setCenter(gPane);
-
         Scene scene = new Scene(border, Color.ROSYBROWN);
 
+        //Options
         primaryStage.setTitle("Test");
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);

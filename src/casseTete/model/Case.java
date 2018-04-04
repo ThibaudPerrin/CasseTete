@@ -15,6 +15,7 @@ public class Case {
 	}
 
 	
+	
 	public void setSymb(Symbole symb) {
 		this.symb = symb;
 	}
