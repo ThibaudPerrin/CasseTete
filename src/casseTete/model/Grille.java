@@ -8,9 +8,10 @@ public class Grille extends Observable {
 	private List<Case> lst;
 	private Case[][] tab;
 	
-	int lastI;
-	int lastJ;
-	int longueur, largeur;
+	private int lastI;
+	private int lastJ;
+	private int longueur, largeur;
+	private boolean canStart = false; 
 	
 	public Grille(int longueur, int largeur) {
 		setLongueur(longueur);
@@ -51,25 +52,41 @@ public class Grille extends Observable {
 	public int getLargeur() {
 		return largeur;
 	}
-
+	
+	public boolean isSymbole(int i , int j) {
+		if(this.tab[i][j].getSymb() != Symbole.VIDE) {
+			canStart = true;
+		}else {
+			canStart = false;
+		}
+		return canStart;
+	}
 	public void startDD(int i , int j ) {
-		System.out.println("startDD : " + i + "-" + j);
-        setChanged();
-        notifyObservers();
+		if(isSymbole(i,j)) {
+			System.out.println("startDD : " + i + "-" + j);
+			setChanged();
+	        notifyObservers();	
+		}
+        
 	}
 	
 	public void parcoursDD(int i , int j){
-		    lastI = i;
+		if(canStart) {
+			lastI = i;
 	        lastJ = j;
 	        System.out.println("parcoursDD : " + i + "-" + j);
 	        setChanged();
 	        notifyObservers();
+		}
+		    
 	}
 	
 	public void stopDD(int i , int j) {
-        System.out.println("stopDD : " + i + "-" + j + " -> " + lastI + "-" + lastJ);
-        setChanged();
-        notifyObservers();
+		if(canStart) {
+	        System.out.println("stopDD : " + i + "-" + j + " -> " + lastI + "-" + lastJ);
+	        setChanged();
+	        notifyObservers();
+		}
 	}
 	
 	
