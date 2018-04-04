@@ -1,4 +1,4 @@
-package casseTete;
+package casseTete.model;
 
 public class Case {
 	
@@ -14,6 +14,8 @@ public class Case {
 		return symb;
 	}
 
+	
+	
 	public void setSymb(Symbole symb) {
 		this.symb = symb;
 	}
@@ -40,6 +42,10 @@ public class Case {
 
 	public void setColonne(int colonne) {
 		this.colonne = colonne;
+	}
+	
+	public String toString() {
+		return ""+this.symb;
 	}
 
 	Lien lien;
