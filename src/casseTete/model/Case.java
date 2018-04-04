@@ -13,8 +13,6 @@ public class Case {
 	public Symbole getSymb() {
 		return symb;
 	}
-
-	
 	
 	public void setSymb(Symbole symb) {
 		this.symb = symb;
