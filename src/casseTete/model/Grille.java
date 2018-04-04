@@ -25,6 +25,11 @@ public class Grille extends Observable {
 				tab[i][j]= new Case();
 			}
 		}
+		placeSymbole();
+	}
+	private void placeSymbole() {
+		tab[0][0].setSymb(Symbole.ETOILE);
+		tab[this.longueur-1][this.largeur-1].setSymb(Symbole.ETOILE);
 	}
 	private void setLongueur(int longueur) {
 		this.longueur = longueur;
