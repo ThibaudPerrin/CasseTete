@@ -37,7 +37,7 @@ public class MainCasseTete extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// Init Model
-		g = new Grille(3, 3);
+		g = new Grille(4, 4);
 		
 		// gestion du placement (permet de palcer le champ Text affichage en haut, et GridPane gPane au centre)
         BorderPane border = new BorderPane();
@@ -61,7 +61,19 @@ public class MainCasseTete extends Application {
 
             @Override
             public void update(Observable o, Object arg) {
-                // TODO
+            	if(arg != null) {
+            		String[] parts = ((String) arg).split("-");
+            		int i = Integer.parseInt(parts[0]);
+            		int j = Integer.parseInt(parts[1]);
+            		int li = Integer.parseInt(parts[2]);
+            		int lj = Integer.parseInt(parts[3]);
+            		CasePane p = new CasePane(g.getTab()[i][j]);
+            		CasePane p2 = new CasePane(g.getTab()[li][lj]);
+            		gPane.add(p, i, j);
+            		gPane.add(p2, li, lj);
+            		System.out.println(i+":"+j+"|"+li+":"+lj);
+            	}
+                	
             }
         });
         

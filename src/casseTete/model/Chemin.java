@@ -18,7 +18,8 @@ public class Chemin {
 	public void setLst(List<Case> lst) {
 		this.lst = lst;
 	}
-
+	
+	
 	
 
 }

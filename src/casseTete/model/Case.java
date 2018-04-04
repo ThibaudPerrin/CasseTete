@@ -2,7 +2,10 @@ package casseTete.model;
 
 public class Case {
 	
-	Symbole symb;
+	private Symbole symb;
+	private Lien lien;
+	private int ligne;
+	private int colonne;
 	
 	public Case() {
 		this.symb = Symbole.VIDE;
@@ -46,9 +49,9 @@ public class Case {
 		return ""+this.symb;
 	}
 
-	Lien lien;
-	int ligne;
-	int colonne;
+	public boolean isEmpty() {
+		return this.getSymb() == Symbole.VIDE && this.getLien() == Lien.CASEVIDE;
+	}
 	
 	
 	
