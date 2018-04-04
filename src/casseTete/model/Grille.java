@@ -1,4 +1,4 @@
-package casseTete;
+package casseTete.model;
 
 import java.util.List;
 import java.util.Observable;
@@ -10,20 +10,43 @@ public class Grille extends Observable {
 	
 	int lastI;
 	int lastJ;
-	int Longueur, largeur;
+	int longueur, largeur;
 	
 	public Grille(int longueur, int largeur) {
 		setLongueur(longueur);
 		setLargeur(largeur);
 		tab = new Case[longueur][largeur];
+		init() ;
 	}
 	
-	private void setLongueur(int longueur) {
-		this.Longueur = longueur;
+	private void init() {
+		for(int i = 0 ; i < this.longueur; i++) {
+			for(int j = 0 ; j < largeur; j++) {
+				tab[i][j]= new Case();
+			}
+		}
 	}
+	private void setLongueur(int longueur) {
+		this.longueur = longueur;
+	}
+	public Case[][] getTab() {
+		return tab;
+	}
+
+	public void setTab(Case[][] tab) {
+		this.tab = tab;
+	}
+
 	private void setLargeur(int largeur) {
 		this.largeur = largeur;
 	}
+	public int getLongueur() {
+		return longueur;
+	}
+	public int getLargeur() {
+		return largeur;
+	}
+
 	public void startDD(int i , int j ) {
 		System.out.println("startDD : " + i + "-" + j);
         setChanged();
@@ -43,6 +66,8 @@ public class Grille extends Observable {
         setChanged();
         notifyObservers();
 	}
+	
+	
 	
 
 }

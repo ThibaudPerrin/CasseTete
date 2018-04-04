@@ -1,4 +1,4 @@
-package casseTete;
+package casseTete.model;
 
 public enum Lien {
 	

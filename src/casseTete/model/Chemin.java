@@ -1,4 +1,4 @@
-package casseTete;
+package casseTete.model;
 
 import java.util.ArrayList;
 import java.util.List;
