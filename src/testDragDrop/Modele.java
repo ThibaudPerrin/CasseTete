@@ -18,6 +18,7 @@ public class Modele extends Observable {
     
     public void startDD(int c, int r) {
         // TODO
+    	
         System.out.println("startDD : " + c + "-" + r);
         setChanged();
         notifyObservers();
