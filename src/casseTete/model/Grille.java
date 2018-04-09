@@ -72,8 +72,10 @@ public class Grille extends Observable {
 			System.out.println("i:"+i+"j:"+j);
 			if(i - lI != 0 ) {
 				this.tab[i][j].setLien(Lien.TRAITHORIZONTAL);
+				this.tab[lI][lJ].setLien(Lien.TRAITHORIZONTAL);
 			}else if(j - lJ !=0) {
 				this.tab[i][j].setLien(Lien.TRAITVERTICAL);
+				this.tab[lI][lJ].setLien(Lien.TRAITVERTICAL);
 			}
 		}else if(lI-vLI == 0 && lI-i ==0 && lJ - vLJ != 0 && lJ- j !=0){
 			this.tab[i][j].setLien(Lien.TRAITVERTICAL);
@@ -102,11 +104,11 @@ public class Grille extends Observable {
 		}else if(lI-vLI == 0 && lI-i == -1 && lJ - vLJ == -1 && lJ- j == 0){
 			this.tab[i][j].setLien(Lien.TRAITHORIZONTAL);
 			this.tab[lI][lJ].setLien(Lien.ANGLESUPGAUCHE);
+		}else if(lI-vLI == 1 && lI-i == 0 && lJ - vLJ == 0 && lJ- j == 1){
+			this.tab[i][j].setLien(Lien.TRAITVERTICAL);
+			this.tab[lI][lJ].setLien(Lien.ANGLEINFDROIT);
 		}
-		else if(lI-vLI == 0 && lI-i == -1 && lJ - vLJ == -1 && lJ- j == 0){
-			this.tab[i][j].setLien(Lien.TRAITHORIZONTAL);
-			this.tab[lI][lJ].setLien(Lien.ANGLESUPGAUCHE);
-		}
+		
 		
         this.ch.getLst().add(this.tab[i][j]);
         
@@ -126,7 +128,7 @@ public class Grille extends Observable {
 	}
 	
 	public void parcoursDD(int i , int j){
-		if(canStart && this.tab[i][j].isEmpty()) {
+		if(canStart ) {
 
 			chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
 			
@@ -145,8 +147,11 @@ public class Grille extends Observable {
 	}
 	
 	public void stopDD(int i , int j) {
-		if(canStart) {
+		if(i!= lastI && j != lastI && isSymbole(lastI,lastJ)) {
+			System.out.println("stopDD : i" + i + "-j" + j + " -> li" + lastI + "-lj" + lastJ+" -> vLastJ" + vLastI + "-vLastJ" + vLastJ);
 	        System.out.println("stopDD : " + i + "-" + j + " -> " + lastI + "-" + lastJ);
+	        
+	        chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
 	        setChanged();
 	        notifyObservers();
 		}
