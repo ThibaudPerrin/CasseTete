@@ -156,6 +156,16 @@ public class Grille extends Observable {
 	        notifyObservers();
 		}
 	}
+	public String toString() {
+		String result = "";
+		for (int i = 0; i < longueur; i++) {
+			for (int j = 0; j < largeur; j++) {
+				result = result+" "+tab[i][j].toString();
+			}
+			result = result+"\n";
+		}
+		return result;
+	}
 	
 	
 	

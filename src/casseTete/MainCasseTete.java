@@ -13,10 +13,14 @@ import casseTete.model.Partie;
 import casseTete.model.Symbole;
 import casseTete.view.CasePane;
 import casseTete.view.GrilleGPane;
+import casseTete.view.GrilleMenu;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -31,8 +35,9 @@ import javafx.stage.Stage;
 
 public class MainCasseTete extends Application {
 	
-	Grille g;
-	Partie partie;
+	private Grille g;
+	private Partie partie;
+	private GrilleGPane gPane;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -41,14 +46,18 @@ public class MainCasseTete extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// Init Model
-		g = new Grille(4, 4);
 		partie = new Partie();
 		
+		// permet de placer les diffrents boutons dans une grille
+        gPane = new GrilleGPane();
+        
+		// Create MenuBar
+        GrilleMenu menuBar = new GrilleMenu(partie, gPane);
+        
 		// gestion du placement (permet de palcer le champ Text affichage en haut, et GridPane gPane au centre)
         BorderPane border = new BorderPane();
 
-        // permet de placer les diffrents boutons dans une grille
-        GrilleGPane gPane = new GrilleGPane();
+        
         
         //Titre
         Text affichage = new Text("Casse TETE");
@@ -59,7 +68,7 @@ public class MainCasseTete extends Application {
         
         
         
-     // la vue observe les "update" du modèle, et réalise les mises à jour graphiques
+        // la vue observe les "update" du modèle, et réalise les mises à jour graphiques
         partie.getGrille().addObserver(new GrilleUpdateObserver(partie.getGrille(), gPane));
         
         
@@ -69,6 +78,7 @@ public class MainCasseTete extends Application {
         
         
         //Options
+        border.setTop(menuBar);
         border.setCenter(gPane);
         Scene scene = new Scene(border, Color.ROSYBROWN);
 

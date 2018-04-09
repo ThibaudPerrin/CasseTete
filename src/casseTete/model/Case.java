@@ -46,7 +46,7 @@ public class Case {
 	}
 	
 	public String toString() {
-		return ""+this.symb;
+		return "	["+this.symb+"-"+this.lien+"]";
 	}
 
 	public boolean isEmpty() {
