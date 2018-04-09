@@ -15,6 +15,9 @@ public class Grille extends Observable {
 	private int vLastI;
 	private int vLastJ;
 	
+	private int nombrePaire;
+	private boolean partieTermine;
+	
 	private int longueur, largeur;
 	private boolean canStart = false; 
 	
@@ -23,6 +26,8 @@ public class Grille extends Observable {
 		setLargeur(largeur);
 		this.tab = new Case[longueur][largeur];
 		this.lst = new ArrayList<Chemin>();
+		this.nombrePaire = 0;
+		this.partieTermine = false;
 		init() ;
 	}
 	
@@ -38,7 +43,9 @@ public class Grille extends Observable {
 		tab[1][1].setSymb(Symbole.ETOILE);
 		tab[this.longueur-2][this.largeur-2].setSymb(Symbole.ETOILE);
 		tab[this.longueur-2][this.largeur-3].setSymb(Symbole.CARRE);
+		this.nombrePaire++;
 	}
+	
 	
 	
 	private void setLongueur(int longueur) {
@@ -78,7 +85,14 @@ public class Grille extends Observable {
 		}
 	}
 	
-	
+	public boolean isParti() {
+		if(this.nombrePaire == 0) {
+			this.partieTermine = true;
+			return true;
+		}else {
+			return false;
+		}
+	}
 	public void chooseLien(int vLI, int vLJ, int lI, int lJ, int i, int j) {
 		//Cas Depart
 		if(vLI == lI && vLJ == lJ) {
@@ -145,7 +159,7 @@ public class Grille extends Observable {
 		return ( soustI == 0 || soustI == 1 || soustI == -1 ) && (soustJ == 0 || soustJ == 1 || soustJ == -1);
 	}
 	public void startDD(int i , int j ) {
-		if(isSymbole(i,j)) {
+		if(isSymbole(i,j) && !this.partieTermine) {
 			lastI = i;
 	        lastJ = j;
 	        vLastI = i;
@@ -159,7 +173,7 @@ public class Grille extends Observable {
 	}
 	
 	public void parcoursDD(int i , int j){
-		if(canStart) {
+		if(canStart && !this.partieTermine) {
 			if(isCasePrec(lastI, lastJ, i, j)) {
 				chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
 
@@ -187,10 +201,21 @@ public class Grille extends Observable {
 		if(i!= lastI && j != lastI && isGoodSymbole(i,j,lastI,lastJ)) {
 			System.out.println("stopDD : i" + i + "-j" + j + " -> li" + lastI + "-lj" + lastJ+" -> vLastJ" + vLastI + "-vLastJ" + vLastJ);
 	        System.out.println("stopDD : " + i + "-" + j + " -> " + lastI + "-" + lastJ);
+	        
 	        this.lst.add(ch);
-
+	        this.ch = new Chemin();
+	        this.nombrePaire --;
+	        
 	        setChanged();
-	        notifyObservers();
+	        
+			if(isParti()){
+				String[] result = {"termine"};
+				notifyObservers(result);
+			}else {
+				
+		        notifyObservers();
+			}
+	        
 		}else {
 			String[] result = deleteChemin();
 			setChanged();

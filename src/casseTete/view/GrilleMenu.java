@@ -1,22 +1,26 @@
 package casseTete.view;
 
 import casseTete.controller.GrilleUpdateObserver;
+import casseTete.controller.NouvellePartieEventH;
 import casseTete.model.Partie;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.stage.Stage;
 
 
 public class GrilleMenu extends MenuBar{
 	
 
+	private Stage primaryStage;
 	private Partie partie;
 	private GrilleGPane gPane;
 	
-	public GrilleMenu(Partie partie, GrilleGPane gPane) {
+	public GrilleMenu(Stage primaryStage, Partie partie, GrilleGPane gPane) {
 		super();
+		this.primaryStage = primaryStage;
 		this.partie = partie;
 		this.gPane = gPane;
 		initGMenuBar();
@@ -41,18 +45,7 @@ public class GrilleMenu extends MenuBar{
         
 
 		//When user click on the Exit item.
-		newGame.setOnAction(new EventHandler<ActionEvent>() {
-		
-		    @Override
-		    public void handle(ActionEvent event) {
-		    	partie.nouvelleParti();
-		    	gPane.getChildren().clear();
-		    	gPane.initGrille(partie);
-		    	// la vue observe les "update" du modèle, et réalise les mises à jour graphiques
-		        partie.getGrille().addObserver(new GrilleUpdateObserver(partie.getGrille(), gPane));
-		    }
-		    
-		});
+		newGame.setOnAction(new NouvellePartieEventH(primaryStage, partie, gPane));
 		//When user click on the Exit item.
 		exitGame.setOnAction(new EventHandler<ActionEvent>() {
 		

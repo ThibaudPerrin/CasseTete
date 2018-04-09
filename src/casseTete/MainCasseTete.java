@@ -52,7 +52,7 @@ public class MainCasseTete extends Application {
         gPane = new GrilleGPane();
         
 		// Create MenuBar
-        GrilleMenu menuBar = new GrilleMenu(partie, gPane);
+        GrilleMenu menuBar = new GrilleMenu(primaryStage, partie, gPane);
         
 		// gestion du placement (permet de palcer le champ Text affichage en haut, et GridPane gPane au centre)
         BorderPane border = new BorderPane();
@@ -69,7 +69,7 @@ public class MainCasseTete extends Application {
         
         
         // la vue observe les "update" du modèle, et réalise les mises à jour graphiques
-        partie.getGrille().addObserver(new GrilleUpdateObserver(partie.getGrille(), gPane));
+        partie.getGrille().addObserver(new GrilleUpdateObserver(primaryStage, partie, gPane));
         
         
         
