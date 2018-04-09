@@ -14,8 +14,8 @@ public class Partie {
 		int Longueur = MIN + (int)(Math.random() * ((MAX - MIN) + 1));
 		int Largeur = MIN + (int)(Math.random() * ((MAX - MIN) + 1));
 		System.out.println("largeur="+Largeur+" longueur="+Longueur);
-		//grille = new Grille(Longueur, Largeur);
-		grille = new Grille(8, 8);
+		grille = new Grille(Longueur, Largeur);
+		//grille = new Grille(8, 8);
 	}
 
 	public Grille getGrille() {
