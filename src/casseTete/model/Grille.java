@@ -1,11 +1,12 @@
 package casseTete.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
 public class Grille extends Observable {
 	
-	private List<Case> lst;
+	private List<Chemin> lst;
 	private Chemin ch;
 	private Case[][] tab;
 	
@@ -21,14 +22,14 @@ public class Grille extends Observable {
 		setLongueur(longueur);
 		setLargeur(largeur);
 		this.tab = new Case[longueur][largeur];
-		this.ch = new Chemin();
+		this.lst = new ArrayList<Chemin>();
 		init() ;
 	}
 	
 	private void init() {
 		for(int i = 0 ; i < this.longueur; i++) {
 			for(int j = 0 ; j < largeur; j++) {
-				tab[i][j]= new Case();
+				tab[i][j]= new Case(i,j);
 			}
 		}
 		placeSymbole();
@@ -72,10 +73,10 @@ public class Grille extends Observable {
 			System.out.println("i:"+i+"j:"+j);
 			if(i - lI != 0 ) {
 				this.tab[i][j].setLien(Lien.TRAITHORIZONTAL);
-				this.tab[lI][lJ].setLien(Lien.TRAITHORIZONTAL);
+				//this.tab[lI][lJ].setLien(Lien.TRAITHORIZONTAL);
 			}else if(j - lJ !=0) {
 				this.tab[i][j].setLien(Lien.TRAITVERTICAL);
-				this.tab[lI][lJ].setLien(Lien.TRAITVERTICAL);
+				//this.tab[lI][lJ].setLien(Lien.TRAITVERTICAL);
 			}
 		}else if(lI-vLI == 0 && lI-i ==0 && lJ - vLJ != 0 && lJ- j !=0){
 			this.tab[i][j].setLien(Lien.TRAITVERTICAL);
@@ -113,23 +114,29 @@ public class Grille extends Observable {
         this.ch.getLst().add(this.tab[i][j]);
         
 	}
-	
+	public void deleteChemin() {
+		for (Case cs : this.ch.getLst()) {
+			int caseLong = cs.getColonne();
+			int caseLarg = cs.getLigne();
+			this.tab[caseLong][caseLarg].setLien(Lien.CASEVIDE);
+		}
+	}
 	public void startDD(int i , int j ) {
 		if(isSymbole(i,j)) {
 			lastI = i;
 	        lastJ = j;
 	        vLastI = i;
 	        vLastJ = j;
+	        this.ch = new Chemin();
 			System.out.println("startDD : " + i + "-" + j);
 			setChanged();
-	        notifyObservers();	
+	        notifyObservers();
 		}
         
 	}
 	
 	public void parcoursDD(int i , int j){
 		if(canStart) {
-
 			chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
 			
 			vLastI = lastI;
@@ -150,12 +157,15 @@ public class Grille extends Observable {
 		if(i!= lastI && j != lastI && isSymbole(lastI,lastJ)) {
 			System.out.println("stopDD : i" + i + "-j" + j + " -> li" + lastI + "-lj" + lastJ+" -> vLastJ" + vLastI + "-vLastJ" + vLastJ);
 	        System.out.println("stopDD : " + i + "-" + j + " -> " + lastI + "-" + lastJ);
-	        
+	        this.lst.add(ch);
 	        chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
 	        setChanged();
 	        notifyObservers();
+		}else {
+			deleteChemin();
 		}
 	}
+	
 	public String toString() {
 		String result = "";
 		for (int i = 0; i < longueur; i++) {

@@ -25,8 +25,14 @@ public class GrilleUpdateObserver implements Observer{
     		int j = Integer.parseInt(parts[1]);
     		int li = Integer.parseInt(parts[2]);
     		int lj = Integer.parseInt(parts[3]);
-    		CasePane p = new CasePane(g.getTab()[i][j]);
-    		CasePane p2 = new CasePane(g.getTab()[li][lj]);
+    		
+    		
+    		CasePane p = new CasePane(g.getTab()[i][j], g, i, j);
+    		CasePane p2 = new CasePane(g.getTab()[li][lj], g, li, lj);
+    		
+    		p.initEvents();
+    		
+    		
     		gPane.add(p, i, j);
     		gPane.add(p2, li, lj);
     		System.out.println(i+":"+j+"|"+li+":"+lj);

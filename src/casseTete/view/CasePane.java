@@ -1,6 +1,10 @@
 package casseTete.view;
 
+import casseTete.controller.ParcoursDDEventH;
+import casseTete.controller.StartDDEventH;
+import casseTete.controller.StopDDEventH;
 import casseTete.model.Case;
+import casseTete.model.Grille;
 import casseTete.model.Symbole;
 import casseTete.model.Lien;
 import javafx.scene.image.Image;
@@ -9,8 +13,21 @@ import javafx.scene.layout.Pane;
 
 public class CasePane extends Pane {
 	
+	private Case c;
+	private Grille grille;
+	private int fColumn;
+	private int fRow;
 	
-	public CasePane(Case c) {
+	public CasePane(Case c, Grille grille, int fColumn, int fRow) {
+		this.c = c;
+		this.grille = grille;
+		this.fColumn = fColumn;
+		this.fRow = fRow;
+		
+		initDesign();
+	}
+	
+	public void initDesign() {
 		Image image;
 		if(c.getLien() == Lien.CASEVIDE) {
 			image = new Image("File:image/../"+c.getSymb()+".png");
@@ -24,6 +41,12 @@ public class CasePane extends Pane {
 		pic.setFitWidth(100);
 		pic.setFitHeight(100);
 		this.getChildren().addAll(pic);
+	}
+	
+	public void initEvents() {
+		setOnDragDetected(new StartDDEventH(this,grille, fColumn, fRow));
+	    setOnDragEntered(new ParcoursDDEventH(grille, fColumn, fRow));
+	    setOnDragDone(new StopDDEventH(grille, fColumn, fRow));
 	}
 	
 }

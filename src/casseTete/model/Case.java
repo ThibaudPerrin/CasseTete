@@ -7,10 +7,11 @@ public class Case {
 	private int ligne;
 	private int colonne;
 	
-	public Case() {
+	public Case(int colonne, int ligne) {
 		this.symb = Symbole.VIDE;
 		this.lien = Lien.CASEVIDE;
-		
+		this.colonne=colonne;
+		this.ligne=ligne;
 	}
 	
 	public Symbole getSymb() {
