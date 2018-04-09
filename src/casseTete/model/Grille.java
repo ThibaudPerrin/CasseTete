@@ -114,12 +114,18 @@ public class Grille extends Observable {
         this.ch.getLst().add(this.tab[i][j]);
         
 	}
-	public void deleteChemin() {
+	public String[] deleteChemin() {
+		String[] sChemins = new String[this.ch.getLst().size()+1];
+		sChemins[0] = "delete";
+		int i = 1;
 		for (Case cs : this.ch.getLst()) {
 			int caseLong = cs.getColonne();
 			int caseLarg = cs.getLigne();
 			this.tab[caseLong][caseLarg].setLien(Lien.CASEVIDE);
+			sChemins[i] = caseLong+"-"+caseLarg;
+			i++;
 		}
+		return sChemins;
 	}
 	public void startDD(int i , int j ) {
 		if(isSymbole(i,j)) {
@@ -138,7 +144,7 @@ public class Grille extends Observable {
 	public void parcoursDD(int i , int j){
 		if(canStart) {
 			chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
-			
+
 			vLastI = lastI;
 	        vLastJ = lastJ;
 			lastI = i;
@@ -146,9 +152,9 @@ public class Grille extends Observable {
 	        
 	        System.out.println("parcoursDD : " + i + "-" + j);
 	        
-	        
+	        String[] result = {"update",""+i,""+j,""+vLastI,""+vLastJ};
 	        setChanged();
-	        notifyObservers(""+i+"-"+j+"-"+vLastI+"-"+vLastJ);
+	        notifyObservers(result);
 		}
 		    
 	}
@@ -158,11 +164,13 @@ public class Grille extends Observable {
 			System.out.println("stopDD : i" + i + "-j" + j + " -> li" + lastI + "-lj" + lastJ+" -> vLastJ" + vLastI + "-vLastJ" + vLastJ);
 	        System.out.println("stopDD : " + i + "-" + j + " -> " + lastI + "-" + lastJ);
 	        this.lst.add(ch);
-	        chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
+
 	        setChanged();
 	        notifyObservers();
 		}else {
-			deleteChemin();
+			String[] result = deleteChemin();
+			setChanged();
+	        notifyObservers(result);
 		}
 	}
 	
