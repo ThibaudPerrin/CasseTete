@@ -42,7 +42,9 @@ public class Grille extends Observable {
 	private void placeSymbole() {
 		tab[1][1].setSymb(Symbole.ETOILE);
 		tab[this.longueur-2][this.largeur-2].setSymb(Symbole.ETOILE);
+		this.nombrePaire++;
 		tab[this.longueur-2][this.largeur-3].setSymb(Symbole.CARRE);
+		tab[1][2].setSymb(Symbole.CARRE);
 		this.nombrePaire++;
 	}
 	
