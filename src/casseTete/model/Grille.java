@@ -127,6 +127,11 @@ public class Grille extends Observable {
 		}
 		return sChemins;
 	}
+	public boolean isCasePrec(int lastI, int lastJ, int i, int j) {
+		int soustI = i - lastI;
+		int soustJ = j - lastJ;
+		return ( soustI == 0 || soustI == 1 || soustI == -1 ) && (soustJ == 0 || soustJ == 1 || soustJ == -1);
+	}
 	public void startDD(int i , int j ) {
 		if(isSymbole(i,j)) {
 			lastI = i;
@@ -143,18 +148,25 @@ public class Grille extends Observable {
 	
 	public void parcoursDD(int i , int j){
 		if(canStart) {
-			chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
+			if(isCasePrec(lastI, lastJ, i, j)) {
+				chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
 
-			vLastI = lastI;
-	        vLastJ = lastJ;
-			lastI = i;
-	        lastJ = j;
-	        
-	        System.out.println("parcoursDD : " + i + "-" + j);
-	        
-	        String[] result = {"update",""+i,""+j,""+vLastI,""+vLastJ};
-	        setChanged();
-	        notifyObservers(result);
+				vLastI = lastI;
+		        vLastJ = lastJ;
+				lastI = i;
+		        lastJ = j;
+		        
+		        System.out.println("parcoursDD : " + i + "-" + j);
+		        
+		        String[] result = {"update",""+i,""+j,""+vLastI,""+vLastJ};
+		        setChanged();
+		        notifyObservers(result);
+			}else {
+				String[] result = deleteChemin();
+				setChanged();
+		        notifyObservers(result);
+			}
+			
 		}
 		    
 	}
