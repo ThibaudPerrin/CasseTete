@@ -128,7 +128,7 @@ public class Grille extends Observable {
 	}
 	
 	public void parcoursDD(int i , int j){
-		if(canStart ) {
+		if(canStart) {
 
 			chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
 			
