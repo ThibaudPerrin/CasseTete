@@ -18,6 +18,17 @@ public class Chemin {
 	public void setLst(List<Case> lst) {
 		this.lst = lst;
 	}
+
+	public Case findCases(int col, int ligne) {
+		Case find = null;
+		for (Case c : lst) {
+			if(c.getColonne() == col && c.getLigne() == ligne) {
+				find = c;
+			}
+			
+		}
+		return find;
+	}
 	
 	
 	
