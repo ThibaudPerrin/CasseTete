@@ -156,9 +156,19 @@ public class Grille extends Observable {
 		return sChemins;
 	}
 	public boolean isCasePrec(int lastI, int lastJ, int i, int j) {
-		int soustI = i - lastI;
-		int soustJ = j - lastJ;
-		return ( soustI == 0 || soustI == 1 || soustI == -1 ) && (soustJ == 0 || soustJ == 1 || soustJ == -1);
+		System.out.println(lastI+":"+lastJ+" ||  "+i+":"+j);
+		int soustI = Math.abs(i - lastI);
+		int soustJ = Math.abs(j - lastJ);
+		boolean condition1;
+		boolean condition2 = false;
+		condition1 = (soustI == 0  && soustJ == 1 ) ;
+		if(this.ch.getLst().size() < 1) {
+			condition2 = (soustJ == 0  && soustI == 0  ) ;
+		}else {
+			condition2 = (soustJ == 0  && soustI == 1 ) ;
+		}
+		boolean condition3 = (condition1 || condition2);
+		return condition3;
 	}
 	public void startDD(int i , int j ) {
 		if(isSymbole(i,j) && !this.partieTermine) {
@@ -177,22 +187,23 @@ public class Grille extends Observable {
 	public void parcoursDD(int i , int j){
 		if(canStart && !this.partieTermine) {
 			if(isCasePrec(lastI, lastJ, i, j)) {
+				
 				chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
 
-				vLastI = lastI;
-		        vLastJ = lastJ;
-				lastI = i;
-		        lastJ = j;
+				
 		        
+		        	vLastI = lastI;
+			        vLastJ = lastJ;
+					lastI = i;
+			        lastJ = j;
+			        
 		        System.out.println("parcoursDD : " + i + "-" + j);
 		        
 		        String[] result = {"update",""+i,""+j,""+vLastI,""+vLastJ};
 		        setChanged();
 		        notifyObservers(result);
 			}else {
-				String[] result = deleteChemin();
-				setChanged();
-		        notifyObservers(result);
+				stopDD(i,j);
 			}
 			
 		}
