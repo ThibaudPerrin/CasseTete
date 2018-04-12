@@ -10,6 +10,8 @@ public class Grille extends Observable {
 	private Chemin ch;
 	private Case[][] tab;
 	
+	private int startI;
+	private int startJ;
 	private int lastI;
 	private int lastJ;
 	private int vLastI;
@@ -172,6 +174,8 @@ public class Grille extends Observable {
 	}
 	public void startDD(int i , int j ) {
 		if(isSymbole(i,j) && !this.partieTermine) {
+			startI = i;
+			startJ = j;
 			lastI = i;
 	        lastJ = j;
 	        vLastI = i;
@@ -187,23 +191,42 @@ public class Grille extends Observable {
 	public void parcoursDD(int i , int j){
 		if(canStart && !this.partieTermine) {
 			if(isCasePrec(lastI, lastJ, i, j)) {
+				if(this.tab[lastI][lastJ].getSymb() != Symbole.VIDE && this.ch.getLst().size() > 1) {
+					lastI = startI;
+			        lastJ = startJ;
+			        vLastI = startI;
+			        vLastJ = startJ;
+					String[] result = deleteChemin();
+					setChanged();
+			        notifyObservers(result);
+				}else {
 				
-				chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
-
-				
-		        
-		        	vLastI = lastI;
+					chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
+	
+						
+					vLastI = lastI;
 			        vLastJ = lastJ;
-					lastI = i;
+					
+			        lastI = i;
 			        lastJ = j;
+			        if(this.tab[i][j].getLien() != Lien.CASEVIDE && this.tab[i][j].getSymb() != Symbole.VIDE) {
+						System.err.println("i,j"+i+"-" +j);
+	
+					}
+				        
+				        
+			        System.out.println("parcoursDD : " + i + "-" + j);
 			        
-		        System.out.println("parcoursDD : " + i + "-" + j);
-		        
-		        String[] result = {"update",""+i,""+j,""+vLastI,""+vLastJ};
-		        setChanged();
-		        notifyObservers(result);
+			        String[] result = {"update",""+i,""+j,""+vLastI,""+vLastJ};
+			        setChanged();
+			        notifyObservers(result);
+				}
 			}else {
-				stopDD(i,j);
+				lastI = startI;
+		        lastJ = startJ;
+		        vLastI = startI;
+		        vLastJ = startJ;
+				stopDD(startI,startJ);
 			}
 			
 		}
@@ -212,7 +235,7 @@ public class Grille extends Observable {
 	
 	public void stopDD(int i , int j) {
 		if(i!= lastI && j != lastI && isGoodSymbole(i,j,lastI,lastJ)) {
-			System.out.println("stopDD : i" + i + "-j" + j + " -> li" + lastI + "-lj" + lastJ+" -> vLastJ" + vLastI + "-vLastJ" + vLastJ);
+			System.out.println("stopDD : i=" + i + "-j=" + j + " -> lastI=" + lastI + "-lastJ=" + lastJ+" -> vLastJ=" + vLastI + "-vLastJ" + vLastJ);
 	        System.out.println("stopDD : " + i + "-" + j + " -> " + lastI + "-" + lastJ);
 	        
 	        this.lst.add(ch);
