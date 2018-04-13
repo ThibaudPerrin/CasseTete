@@ -14,7 +14,7 @@ public class GrilleGPane extends GridPane{
 		super();
 		setPrefSize(800, 800);
         setAlignment(Pos.CENTER);
-        setGridLinesVisible(true);
+        //setGridLinesVisible(true);
 	}
 	
 	public void initGrille(Partie partie) {
@@ -25,19 +25,31 @@ public class GrilleGPane extends GridPane{
                 final int fRow = j;
         		CasePane p = new CasePane(partie.getGrille().getTab()[i][j], partie.getGrille(), fColumn, fRow);
         		p.initEvents();
-        		add(p, i, j);
+        		monAdd(p,i,j);
         	}
         }
 	}
 	
 	
-	public Node getNodeFromGridPane( int col, int row) {
-	    for (Node node : getChildren()) {
-	    	System.err.println(getColumnIndex(node));
-	        if (getColumnIndex(node) == col && getRowIndex(node) == row) {
-	            return node;
-	        }
+	public Node getNodeFromGridPane( Node node1, int col, int row) {
+		Node find = null;
+	    for(Node n : getChildren()) {
+	    	if(getColumnIndex(n) != null && getRowIndex(n) != null && getColumnIndex(n) == col && getRowIndex(n) == row) {
+	    		System.err.println(getColumnIndex(n)+" = "+col+"__ "+getRowIndex(n)+"="+row);
+	    		find = n;
+//	    		((CasePane) n).deletEvents();
+	    		getChildren().remove(n);
+	    			
+	    	}
+	    	
 	    }
-	    return null;
+	    return find;
+	}
+
+	public void monAdd(CasePane p, int i, int j) {
+        GridPane.setColumnIndex(p, i);
+        GridPane.setRowIndex(p, j);
+		getChildren().add(p);
+		
 	}
 }

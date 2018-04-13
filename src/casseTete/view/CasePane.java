@@ -7,8 +7,14 @@ import casseTete.model.Case;
 import casseTete.model.Grille;
 import casseTete.model.Symbole;
 import casseTete.model.Lien;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
 public class CasePane extends Pane {
@@ -17,14 +23,20 @@ public class CasePane extends Pane {
 	private Grille grille;
 	private int fColumn;
 	private int fRow;
+	private ParcoursDDEventH parcoursdd;
+	private StartDDEventH startdd;
+	private StopDDEventH stopdd;
 	
 	public CasePane(Case c, Grille grille, int fColumn, int fRow) {
 		this.c = c;
 		this.grille = grille;
 		this.fColumn = fColumn;
 		this.fRow = fRow;
-		
+		this.startdd = new StartDDEventH(this,grille, fColumn, fRow);
+		this.parcoursdd = new ParcoursDDEventH(grille, fColumn, fRow);
+		this.stopdd = new StopDDEventH(grille, fColumn, fRow);
 		initDesign();
+		deletEvents();
 	}
 	
 	public void initDesign() {
@@ -41,12 +53,29 @@ public class CasePane extends Pane {
 		pic.setFitWidth(100);
 		pic.setFitHeight(100);
 		this.getChildren().addAll(pic);
+		this.setOnMouseClicked(new EventRemoveLien(this.grille, this.fColumn, this.fRow));
+//		this.setOnMouseClicked(new EventHandler<Event>() {
+//
+//			@Override
+//			public void handle(Event event) {
+//				System.out.println("click");
+//				
+//			}
+//	    	
+//		});
 	}
 	
 	public void initEvents() {
-		setOnDragDetected(new StartDDEventH(this,grille, fColumn, fRow));
-	    setOnDragEntered(new ParcoursDDEventH(grille, fColumn, fRow));
-	    setOnDragDone(new StopDDEventH(grille, fColumn, fRow));
+		this.setOnDragDetected(startdd);
+		this.setOnDragEntered(parcoursdd);
+		this.setOnDragDone(stopdd);
+
+	    
 	}
 	
+	public void deletEvents() {
+		this.removeEventHandler(MouseEvent.ANY, startdd);
+		this.removeEventHandler(DragEvent.ANY, parcoursdd);
+		this.removeEventHandler(DragEvent.ANY, stopdd);
+	}
 }

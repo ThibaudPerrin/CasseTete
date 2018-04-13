@@ -1,6 +1,7 @@
 package casseTete.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 
@@ -144,6 +145,36 @@ public class Grille extends Observable {
         this.ch.getLst().add(this.tab[i][j]);
         
 	}
+	public boolean findChemin(int column, int line) {
+		Case findingCcase = null;
+		boolean find = false;
+		for (Iterator<Chemin> iter = lst.listIterator(); iter.hasNext(); ) {
+			Chemin chemin = iter.next();
+		    if (chemin.findCases(column, line) != null) {
+		    	this.ch.getLst().addAll(chemin.getLst());
+		        iter.remove();
+		        find = true;
+		        eraseChemin();
+		        nombrePaire++;
+		    }
+		}
+		
+		
+		return find;
+	}
+	public boolean verifCaseLibre(int column, int line) {
+		
+		if(this.tab[column][line].getLien() != Lien.CASEVIDE) {
+			System.err.println("icicciicici");
+			return !(findChemin(column, line));
+		}else {
+			return true;
+		}
+		
+		
+		
+	}
+	
 	public String[] deleteChemin() {
 		String[] sChemins = new String[this.ch.getLst().size()+1];
 		sChemins[0] = "delete";
@@ -188,17 +219,21 @@ public class Grille extends Observable {
         
 	}
 	
+	public void eraseChemin() {
+		lastI = startI;
+        lastJ = startJ;
+        vLastI = startI;
+        vLastJ = startJ;
+		String[] result = deleteChemin();
+		setChanged();
+        notifyObservers(result);
+	}
+	
 	public void parcoursDD(int i , int j){
 		if(canStart && !this.partieTermine) {
-			if(isCasePrec(lastI, lastJ, i, j)) {
+			if(isCasePrec(lastI, lastJ, i, j) && verifCaseLibre(i,j)) {
 				if(this.tab[lastI][lastJ].getSymb() != Symbole.VIDE && this.ch.getLst().size() > 1) {
-					lastI = startI;
-			        lastJ = startJ;
-			        vLastI = startI;
-			        vLastJ = startJ;
-					String[] result = deleteChemin();
-					setChanged();
-			        notifyObservers(result);
+					eraseChemin();
 				}else {
 				
 					chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
@@ -206,13 +241,8 @@ public class Grille extends Observable {
 						
 					vLastI = lastI;
 			        vLastJ = lastJ;
-					
 			        lastI = i;
 			        lastJ = j;
-			        if(this.tab[i][j].getLien() != Lien.CASEVIDE && this.tab[i][j].getSymb() != Symbole.VIDE) {
-						System.err.println("i,j"+i+"-" +j);
-	
-					}
 				        
 				        
 			        System.out.println("parcoursDD : " + i + "-" + j);
@@ -222,11 +252,12 @@ public class Grille extends Observable {
 			        notifyObservers(result);
 				}
 			}else {
-				lastI = startI;
-		        lastJ = startJ;
-		        vLastI = startI;
-		        vLastJ = startJ;
-				stopDD(startI,startJ);
+				eraseChemin();
+//				lastI = startI;
+//		        lastJ = startJ;
+//		        vLastI = startI;
+//		        vLastJ = startJ;
+//				stopDD(startI,startJ);
 			}
 			
 		}

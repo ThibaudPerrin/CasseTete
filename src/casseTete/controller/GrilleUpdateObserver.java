@@ -8,6 +8,7 @@ import casseTete.model.Partie;
 import casseTete.view.CasePane;
 import casseTete.view.GrilleGPane;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -114,11 +115,14 @@ public class GrilleUpdateObserver implements Observer{
 		
 		CasePane p = new CasePane(partie.getGrille().getTab()[i][j], partie.getGrille(), i, j);
 		CasePane p2 = new CasePane(partie.getGrille().getTab()[li][lj], partie.getGrille(), li, lj);
+//		gPane.getNodeFromGridPane(p, i, j);
+//		gPane.getNodeFromGridPane(p2, li, lj);
+		//p.setOnDragEntered(new ParcoursDDEventH(partie.getGrille(), i, j));
 		
-		
-		gPane.add(p, i, j);
-		gPane.add(p2, li, lj);
+		gPane.monAdd(p, i, j);
+		gPane.monAdd(p2, li, lj);
 		System.out.println(i+":"+j+"|"+li+":"+lj);
+		
 	}
 	
 	public void deleteChemin(String[] parts) {
