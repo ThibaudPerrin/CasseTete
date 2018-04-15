@@ -20,6 +20,7 @@ public class Grille extends Observable {
 	
 	private int nombrePaire;
 	private boolean partieTermine;
+	private boolean restePlace;
 	
 	private int longueur, largeur;
 	private boolean canStart = false; 
@@ -31,6 +32,7 @@ public class Grille extends Observable {
 		this.lst = new ArrayList<Chemin>();
 		this.nombrePaire = 0;
 		this.partieTermine = false;
+		this.restePlace = true;
 		init() ;
 	}
 	
@@ -40,17 +42,76 @@ public class Grille extends Observable {
 				tab[i][j]= new Case(i,j);
 			}
 		}
-		placeSymbole();
+		initGrille();
 	}
-	private void placeSymbole() {
-		tab[1][1].setSymb(Symbole.ETOILE);
-		tab[this.longueur-2][this.largeur-2].setSymb(Symbole.ETOILE);
-		this.nombrePaire++;
-		tab[this.longueur-2][this.largeur-3].setSymb(Symbole.CARRE);
-		tab[1][2].setSymb(Symbole.CARRE);
-		this.nombrePaire++;
+	private void initGrille() {
+		System.err.println(Symbole.values().length+"=="+(this.nombrePaire+1));
+		while(restePlace) {
+			placeSymbole();
+			if(Symbole.values().length == this.nombrePaire+1) {
+				restePlace = false;
+			}
+		}
+		
+//		placeSymbole();
+		
+//		tab[1][1].setSymb(Symbole.ETOILE);
+//		tab[this.longueur-2][this.largeur-2].setSymb(Symbole.ETOILE);
+//		this.nombrePaire++;
+//		System.err.println(Symbole.values()[this.nombrePaire]);
+//		tab[this.longueur-2][this.largeur-3].setSymb(Symbole.CARRE);
+//		tab[1][2].setSymb(Symbole.CARRE);
+//		this.nombrePaire++;
+//		System.err.println(Symbole.values()[this.nombrePaire]);
 	}
-	
+	public void placeSymbole() {
+		boolean tryPlaceSymbol = true;
+		boolean findSymbol1 = false, findSymbol2 = false;
+		int compteurTry = 5;
+		int col1=0, line1=0;
+		int col2, line2;
+		System.out.println("ici1");
+		while(tryPlaceSymbol && !findSymbol1) {
+			col1 = 0 + (int)(Math.random() * ((this.longueur - 0)));
+			line1 = 0 + (int)(Math.random() * ((this.largeur)));
+			System.out.println(col1+" ::: "+line1);
+			if(this.tab[col1][line1].getSymb() == Symbole.VIDE && this.tab[col1][line1].getLien() == Lien.CASEVIDE) {
+				System.out.println("ici1.2");
+				this.tab[col1][line1].setSymb(Symbole.values()[this.nombrePaire+1]);
+				findSymbol1 = true;
+				compteurTry = 5;
+				System.out.println("ici1.3");
+			}else {
+				compteurTry--;
+			}
+			if(compteurTry <= 0) {
+				tryPlaceSymbol = false;
+			}
+		}
+		
+		System.out.println("ici2");
+		while(tryPlaceSymbol && !findSymbol2 && findSymbol1) {
+			col2 = 0 + (int)(Math.random() * ((this.longueur - 0)));
+			line2 = 0 + (int)(Math.random() * ((this.largeur)));
+			System.out.println(col2+" ::: "+line2);
+			if(this.tab[col2][line2].getSymb() == Symbole.VIDE && this.tab[col2][line2].getLien() == Lien.CASEVIDE) {
+				this.tab[col2][line2].setSymb(Symbole.values()[this.nombrePaire+1]);
+				findSymbol2 = true;
+				compteurTry = 5;
+			}else {
+				compteurTry--;
+			}
+			if(compteurTry <= 0) {
+				this.tab[col1][line1].setSymb(Symbole.VIDE);
+				tryPlaceSymbol = false;
+			}
+		}
+		System.out.println("ici3");
+		if(findSymbol1 && findSymbol2) {
+			this.nombrePaire++;
+		}
+		System.out.println("ici4");
+	}
 	
 	
 	private void setLongueur(int longueur) {

@@ -2,7 +2,7 @@ package casseTete.model;
 
 public class Partie {
 	private static int MAX = 8;
-	private static int MIN = 4;
+	private static int MIN = 5;
 	
 	private Grille grille;
 	
