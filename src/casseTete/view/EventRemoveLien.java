@@ -17,6 +17,5 @@ public class EventRemoveLien implements EventHandler<Event> {
 
 	public void handle(Event event) {
 		this.grille.findChemin(this.fColumn, this.fRow);
-		
 	}
 }

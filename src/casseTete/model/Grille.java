@@ -316,7 +316,8 @@ public class Grille extends Observable {
 	}
 	
 	public void stopDD(int i , int j) {
-		if(i!= lastI && j != lastI && isGoodSymbole(i,j,lastI,lastJ)) {
+		
+		if((i!= lastI || j != lastJ) && isGoodSymbole(i,j,lastI,lastJ)) {
 			//System.out.println("stopDD : i=" + i + "-j=" + j + " -> lastI=" + lastI + "-lastJ=" + lastJ+" -> vLastJ=" + vLastI + "-vLastJ" + vLastJ);
 	        //System.out.println("stopDD : " + i + "-" + j + " -> " + lastI + "-" + lastJ);
 	        

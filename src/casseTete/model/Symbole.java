@@ -7,6 +7,4 @@ public enum Symbole {
 	VERT,
 	JAUNE;
 	
-	
-	
 }
