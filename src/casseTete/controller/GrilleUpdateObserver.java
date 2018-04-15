@@ -121,7 +121,7 @@ public class GrilleUpdateObserver implements Observer{
 		
 		gPane.monAdd(p, i, j);
 		gPane.monAdd(p2, li, lj);
-		System.out.println(i+":"+j+"|"+li+":"+lj);
+//		System.out.println(i+":"+j+"|"+li+":"+lj);
 		
 	}
 	

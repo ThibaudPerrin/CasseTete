@@ -44,43 +44,35 @@ public class Grille extends Observable {
 		}
 		initGrille();
 	}
+	
 	private void initGrille() {
-		System.err.println(Symbole.values().length+"=="+(this.nombrePaire+1));
+		
 		while(restePlace) {
 			placeSymbole();
 			if(Symbole.values().length == this.nombrePaire+1) {
 				restePlace = false;
 			}
 		}
-		
-//		placeSymbole();
-		
-//		tab[1][1].setSymb(Symbole.ETOILE);
-//		tab[this.longueur-2][this.largeur-2].setSymb(Symbole.ETOILE);
-//		this.nombrePaire++;
-//		System.err.println(Symbole.values()[this.nombrePaire]);
-//		tab[this.longueur-2][this.largeur-3].setSymb(Symbole.CARRE);
-//		tab[1][2].setSymb(Symbole.CARRE);
-//		this.nombrePaire++;
-//		System.err.println(Symbole.values()[this.nombrePaire]);
+
 	}
+	
 	public void placeSymbole() {
 		boolean tryPlaceSymbol = true;
 		boolean findSymbol1 = false, findSymbol2 = false;
 		int compteurTry = 5;
 		int col1=0, line1=0;
 		int col2, line2;
-		System.out.println("ici1");
+		
 		while(tryPlaceSymbol && !findSymbol1) {
 			col1 = 0 + (int)(Math.random() * ((this.longueur - 0)));
 			line1 = 0 + (int)(Math.random() * ((this.largeur)));
-			System.out.println(col1+" ::: "+line1);
+			
 			if(this.tab[col1][line1].getSymb() == Symbole.VIDE && this.tab[col1][line1].getLien() == Lien.CASEVIDE) {
-				System.out.println("ici1.2");
+				
 				this.tab[col1][line1].setSymb(Symbole.values()[this.nombrePaire+1]);
 				findSymbol1 = true;
 				compteurTry = 5;
-				System.out.println("ici1.3");
+				
 			}else {
 				compteurTry--;
 			}
@@ -89,11 +81,10 @@ public class Grille extends Observable {
 			}
 		}
 		
-		System.out.println("ici2");
 		while(tryPlaceSymbol && !findSymbol2 && findSymbol1) {
 			col2 = 0 + (int)(Math.random() * ((this.longueur - 0)));
 			line2 = 0 + (int)(Math.random() * ((this.largeur)));
-			System.out.println(col2+" ::: "+line2);
+			
 			if(this.tab[col2][line2].getSymb() == Symbole.VIDE && this.tab[col2][line2].getLien() == Lien.CASEVIDE) {
 				this.tab[col2][line2].setSymb(Symbole.values()[this.nombrePaire+1]);
 				findSymbol2 = true;
@@ -106,11 +97,11 @@ public class Grille extends Observable {
 				tryPlaceSymbol = false;
 			}
 		}
-		System.out.println("ici3");
+		
 		if(findSymbol1 && findSymbol2) {
 			this.nombrePaire++;
 		}
-		System.out.println("ici4");
+		
 	}
 	
 	
@@ -162,7 +153,7 @@ public class Grille extends Observable {
 	public void chooseLien(int vLI, int vLJ, int lI, int lJ, int i, int j) {
 		//Cas Depart
 		if(vLI == lI && vLJ == lJ) {
-			System.out.println("i:"+i+"j:"+j);
+			
 			if(i - lI != 0 ) {
 				this.tab[i][j].setLien(Lien.TRAITHORIZONTAL);
 				//this.tab[lI][lJ].setLien(Lien.TRAITHORIZONTAL);
@@ -226,7 +217,6 @@ public class Grille extends Observable {
 	public boolean verifCaseLibre(int column, int line) {
 		
 		if(this.tab[column][line].getLien() != Lien.CASEVIDE) {
-			System.err.println("icicciicici");
 			return !(findChemin(column, line));
 		}else {
 			return true;
@@ -250,7 +240,7 @@ public class Grille extends Observable {
 		return sChemins;
 	}
 	public boolean isCasePrec(int lastI, int lastJ, int i, int j) {
-		System.out.println(lastI+":"+lastJ+" ||  "+i+":"+j);
+		
 		int soustI = Math.abs(i - lastI);
 		int soustJ = Math.abs(j - lastJ);
 		boolean condition1;
@@ -273,7 +263,7 @@ public class Grille extends Observable {
 	        vLastI = i;
 	        vLastJ = j;
 	        this.ch = new Chemin();
-			System.out.println("startDD : " + i + "-" + j);
+			//System.out.println("startDD : " + i + "-" + j);
 			setChanged();
 	        notifyObservers();
 		}
@@ -306,7 +296,7 @@ public class Grille extends Observable {
 			        lastJ = j;
 				        
 				        
-			        System.out.println("parcoursDD : " + i + "-" + j);
+			        //System.out.println("parcoursDD : " + i + "-" + j);
 			        
 			        String[] result = {"update",""+i,""+j,""+vLastI,""+vLastJ};
 			        setChanged();
@@ -327,8 +317,8 @@ public class Grille extends Observable {
 	
 	public void stopDD(int i , int j) {
 		if(i!= lastI && j != lastI && isGoodSymbole(i,j,lastI,lastJ)) {
-			System.out.println("stopDD : i=" + i + "-j=" + j + " -> lastI=" + lastI + "-lastJ=" + lastJ+" -> vLastJ=" + vLastI + "-vLastJ" + vLastJ);
-	        System.out.println("stopDD : " + i + "-" + j + " -> " + lastI + "-" + lastJ);
+			//System.out.println("stopDD : i=" + i + "-j=" + j + " -> lastI=" + lastI + "-lastJ=" + lastJ+" -> vLastJ=" + vLastI + "-vLastJ" + vLastJ);
+	        //System.out.println("stopDD : " + i + "-" + j + " -> " + lastI + "-" + lastJ);
 	        
 	        this.lst.add(ch);
 	        this.ch = new Chemin();
