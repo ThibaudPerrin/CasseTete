@@ -89,6 +89,7 @@ public class GrilleUpdateObserver implements Observer{
 		    }
 		});
 	    
+	    
 		 
          dialog.initModality(Modality.APPLICATION_MODAL);
          dialog.initOwner(primaryStage);

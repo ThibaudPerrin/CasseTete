@@ -83,7 +83,7 @@ public class MainCasseTete extends Application {
         Scene scene = new Scene(border, Color.ROSYBROWN);
 
         //Options
-        primaryStage.setTitle("Test");
+        primaryStage.setTitle("Casse Tête");
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
