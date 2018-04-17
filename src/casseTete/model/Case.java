@@ -46,6 +46,10 @@ public class Case {
 		this.colonne = colonne;
 	}
 	
+	public String infoToString() {
+		return "col : "+this.getColonne()+" | line : "+this.getLigne();
+	}
+	
 	public String toString() {
 		return "	["+this.symb+"-"+this.lien+"]";
 	}

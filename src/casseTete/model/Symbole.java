@@ -5,6 +5,8 @@ public enum Symbole {
 	VIDE,
 	BLEU,
 	VERT,
-	JAUNE;
+	JAUNE,
+	ORANGE,
+	ROSE;
 	
 }

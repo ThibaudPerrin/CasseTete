@@ -21,6 +21,7 @@ public class Grille extends Observable {
 	private int nombrePaire;
 	private boolean partieTermine;
 	private boolean restePlace;
+	private boolean initPaire;
 	
 	private int longueur, largeur;
 	private boolean canStart = false; 
@@ -33,6 +34,7 @@ public class Grille extends Observable {
 		this.nombrePaire = 0;
 		this.partieTermine = false;
 		this.restePlace = true;
+		this.ch = new Chemin();
 		init() ;
 	}
 	
@@ -46,33 +48,149 @@ public class Grille extends Observable {
 	}
 	
 	private void initGrille() {
-		
-		while(restePlace) {
-			placeSymbole();
+		initPaire = true;
+		//System.out.println(this.nombrePaire);
+		boolean continu = true;
+		while(continu) {
+			//System.out.println("lalaal");
+			continu = placeSymbole();
+			//System.out.println("lalaal2");
 			if(Symbole.values().length == this.nombrePaire+1) {
-				restePlace = false;
+				//System.out.println("lalaal3");
+				continu = false;
+				//System.out.println("lalaal4");
 			}
 		}
-
+		addTrou() ;
+		supprAllLien();
+		initPaire = false;
+		//System.out.println(this.nombrePaire);
 	}
 	
-	public void placeSymbole() {
+	public void addTrou() {
+		
+		for (int i = 0; i < tab.length; i++) {
+			for (int j = 0; j < tab[i].length; j++) {
+				Case cases = tab[i][j];
+				if(cases.getLien() == Lien.CASEVIDE && cases.getSymb() == Symbole.VIDE) {
+					int rand = 0 + (int)(Math.random() * ((2 - 0)));
+					
+					if(rand == 1) {
+						cases.setLien(Lien.TROU);
+					}
+				}
+			}
+			
+		}
+	}
+	
+	public boolean findCheminPlusCourt(Case cDepart, Case cArrive) {
+		int compteur = 30;
+		startDD(cDepart.getColonne(), cDepart.getLigne());
+		Case cCourant = chooseCasePlusCourt(cDepart,cArrive);
+		parcoursDD(cCourant.getColonne(), cCourant.getLigne());
+		//System.out.println("iii"+compteur);
+		while(cCourant != cArrive && cCourant!=null && compteur > 0) {
+			cCourant = chooseCasePlusCourt(cCourant,cArrive);
+			if(cCourant!=null) {
+				parcoursDD(cCourant.getColonne(), cCourant.getLigne());
+			}
+			compteur --;
+		}
+		//System.out.println();
+		stopDD(startI,startJ);
+		
+		if(cCourant!=null && isGoodSymbole(startI, startJ, lastI, lastJ)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	
+	public Case chooseCasePlusCourt(Case cCourante, Case cArrive) {
+		Case find = null;
+		Case haut = null, bas = null, gauche = null, droite = null;
+		int Min = 5000;
+		
+		//haut
+		//System.err.println("startI:"+startI+" startJ:"+ startJ+" lastI:"+ lastI+" lastJ:"+ lastJ);
+		if(cCourante.getLigne() > 0 ) {
+			haut = this.tab[cCourante.getColonne()][cCourante.getLigne()-1];
+			int diffHaut = diffDistance(haut, cArrive);
+
+			//System.out.println("haut : "+haut.infoToString()+" diffHaut : "+diffHaut);
+			if((Min > diffHaut && haut.getLien() == Lien.CASEVIDE)) {
+				Min = diffHaut;
+				find = haut;
+			}
+		}
+		//bas
+		if(cCourante.getLigne() < this.largeur-1) {
+			bas = this.tab[cCourante.getColonne()][cCourante.getLigne()+1];
+			int diffBas = diffDistance(bas, cArrive);
+			
+			//System.out.println("bas : "+bas.infoToString()+" diffBas : "+diffBas);
+			
+			if((Min > diffBas && bas.getLien() == Lien.CASEVIDE )) {
+				Min = diffBas;
+				find = bas;
+			}
+		}
+		//gauche
+		if(cCourante.getColonne() > 0) {
+			gauche = this.tab[cCourante.getColonne()-1][cCourante.getLigne()];
+			int diffGauche = diffDistance(gauche, cArrive);
+			//System.out.println("gauche : "+gauche.infoToString()+" diffGauche : "+diffGauche);
+			if((Min > diffGauche && gauche.getLien() == Lien.CASEVIDE )) {
+				Min = diffGauche;
+				find = gauche;
+			}
+		}
+		//droite
+		if(cCourante.getColonne() < this.longueur-1) {
+			droite = this.tab[cCourante.getColonne()+1][cCourante.getLigne()];
+			int diffDroite = diffDistance(droite, cArrive);
+
+			//System.out.println("droite : "+droite.infoToString()+" diffDroite : "+diffDroite);
+			if((Min > diffDroite && droite.getLien() == Lien.CASEVIDE)) {
+				Min = diffDroite;
+				find = droite;
+			}
+		}
+		
+//		if(Min != 5000) {
+//			System.out.println("find : "+find.infoToString());
+//			System.out.println(toString());
+//		}
+		
+		return find;
+	}
+	
+	public int diffDistance(Case cCourante, Case cArrive) {
+		int diffCol = Math.abs(cCourante.getColonne()-cArrive.getColonne());
+		int diffLine = Math.abs(cCourante.getLigne()-cArrive.getLigne());
+		int diffTotal = Math.abs(diffCol+diffLine);
+		//int[] result = {diffCol,diffLine,diffTotal};
+		int result = diffTotal;
+		return result;
+	}
+	
+	
+	public Case placeSymb1() {
 		boolean tryPlaceSymbol = true;
-		boolean findSymbol1 = false, findSymbol2 = false;
 		int compteurTry = 5;
 		int col1=0, line1=0;
-		int col2, line2;
+		Case findCaseSymbol = null;
 		
-		while(tryPlaceSymbol && !findSymbol1) {
+		while(tryPlaceSymbol && findCaseSymbol == null && compteurTry > 0) {
 			col1 = 0 + (int)(Math.random() * ((this.longueur - 0)));
 			line1 = 0 + (int)(Math.random() * ((this.largeur)));
 			
 			if(this.tab[col1][line1].getSymb() == Symbole.VIDE && this.tab[col1][line1].getLien() == Lien.CASEVIDE) {
 				
 				this.tab[col1][line1].setSymb(Symbole.values()[this.nombrePaire+1]);
-				findSymbol1 = true;
-				compteurTry = 5;
-				
+				findCaseSymbol = this.tab[col1][line1];
 			}else {
 				compteurTry--;
 			}
@@ -80,26 +198,97 @@ public class Grille extends Observable {
 				tryPlaceSymbol = false;
 			}
 		}
+		return findCaseSymbol;
+	}
+	
+	public Case placeSymb2(Case findCaseSymbol1) {
+		boolean tryPlaceSymbol = true;
+		int compteurTry = 5;
+		int col2=0, line2=0;
+		Case findCaseSymbol = null;
 		
-		while(tryPlaceSymbol && !findSymbol2 && findSymbol1) {
+		while(tryPlaceSymbol && findCaseSymbol == null && findCaseSymbol1 != null && compteurTry > 0) {
 			col2 = 0 + (int)(Math.random() * ((this.longueur - 0)));
 			line2 = 0 + (int)(Math.random() * ((this.largeur)));
 			
 			if(this.tab[col2][line2].getSymb() == Symbole.VIDE && this.tab[col2][line2].getLien() == Lien.CASEVIDE) {
 				this.tab[col2][line2].setSymb(Symbole.values()[this.nombrePaire+1]);
-				findSymbol2 = true;
+				findCaseSymbol = this.tab[col2][line2];
 				compteurTry = 5;
 			}else {
 				compteurTry--;
 			}
 			if(compteurTry <= 0) {
-				this.tab[col1][line1].setSymb(Symbole.VIDE);
+				this.tab[col2][line2].setSymb(Symbole.VIDE);
 				tryPlaceSymbol = false;
 			}
 		}
+		return findCaseSymbol;
+	}
+	
+	public boolean placeSymbole() {
+
+		Case symb1, symb2;
+		int compteurTry = 2;
 		
-		if(findSymbol1 && findSymbol2) {
-			this.nombrePaire++;
+		
+		symb1 = placeSymb1();
+		symb2 = placeSymb2(symb1);
+		
+		
+		
+		if(symb1 != null  && symb2 != null) {
+			boolean cheminPossible = findCheminPlusCourt(symb1,symb2);
+			//System.out.println("icicics");
+			while(!cheminPossible && compteurTry > 0 && symb1 != null  && symb2 != null) {
+				//System.out.println("icicics2");
+				if(symb1 != null) {
+					symb1.setSymb(Symbole.VIDE);
+				}
+				if(symb2 != null) {
+					symb2.setSymb(Symbole.VIDE);
+				}
+				//deleteChemin();
+				compteurTry --;
+				symb1 = placeSymb1();
+				symb2 = placeSymb2(symb1);
+				//System.out.println("icicics3");
+				if(symb1 != null  && symb2 != null) {
+					//System.out.println("icicics4");
+					cheminPossible = findCheminPlusCourt(symb1,symb2);
+					//System.out.println("icicics5");
+				}
+				
+			}
+			//System.out.println("icicics6");
+			if(cheminPossible) {
+				//System.out.println("icicics7");
+				this.nombrePaire++;
+				//System.out.println("icicics8");
+				return true;
+			}else {
+				//System.out.println("icicics8");
+				if(symb1 != null) {
+					symb1.setSymb(Symbole.VIDE);
+				}
+				if(symb2 != null) {
+					symb2.setSymb(Symbole.VIDE);
+				}
+				//deleteChemin();
+				return false;
+			}
+			
+			
+		}else {
+			if(symb1 != null) {
+				symb1.setSymb(Symbole.VIDE);
+			}
+			if(symb2 != null) {
+				symb2.setSymb(Symbole.VIDE);
+			}
+			
+			
+			return false;
 		}
 		
 	}
@@ -135,19 +324,38 @@ public class Grille extends Observable {
 		return canStart;
 	}
 	public boolean isGoodSymbole(int i, int j, int lastI, int lastJ) {
-		if(isSymbole(lastI,lastJ)) {
-			return this.tab[i][j].getSymb() == this.tab[lastI][lastJ].getSymb();
+		if(i != lastI || j != lastJ) {
+			if(isSymbole(lastI,lastJ)) {
+				return this.tab[i][j].getSymb() == this.tab[lastI][lastJ].getSymb();
+			}else {
+				return false;
+			}
 		}else {
 			return false;
 		}
+		
 	}
 	
 	public boolean isParti() {
-		if(this.nombrePaire == 0) {
+		if(this.nombrePaire == 0  && initPaire == false) {
 			this.partieTermine = true;
 			return true;
 		}else {
 			return false;
+		}
+	}
+	public void supprAllLien() {
+		this.lst = new ArrayList<Chemin>();
+		this.ch = new Chemin();
+		for (int i = 0; i < tab.length; i++) {
+			for (int j = 0; j < tab[i].length; j++) {
+				Case cases = tab[i][j];
+				if(cases.getLien()!= Lien.TROU) {
+					cases.setLien(Lien.CASEVIDE);
+				}
+				
+			}
+			
 		}
 	}
 	public void chooseLien(int vLI, int vLJ, int lI, int lJ, int i, int j) {
@@ -215,12 +423,16 @@ public class Grille extends Observable {
 		return find;
 	}
 	public boolean verifCaseLibre(int column, int line) {
-		
-		if(this.tab[column][line].getLien() != Lien.CASEVIDE) {
-			return !(findChemin(column, line));
+		if(this.tab[column][line].getLien() == Lien.TROU) {
+			return false;
 		}else {
-			return true;
+			if(this.tab[column][line].getLien() != Lien.CASEVIDE) {
+				return !(findChemin(column, line));
+			}else {
+				return true;
+			}
 		}
+		
 		
 		
 		
@@ -255,6 +467,7 @@ public class Grille extends Observable {
 		return condition3;
 	}
 	public void startDD(int i , int j ) {
+		
 		if(isSymbole(i,j) && !this.partieTermine) {
 			startI = i;
 			startJ = j;
@@ -286,7 +499,6 @@ public class Grille extends Observable {
 				if(this.tab[lastI][lastJ].getSymb() != Symbole.VIDE && this.ch.getLst().size() > 1) {
 					eraseChemin();
 				}else {
-				
 					chooseLien(vLastI,vLastJ, lastI, lastJ, i, j);
 	
 						
@@ -320,10 +532,13 @@ public class Grille extends Observable {
 		if((i!= lastI || j != lastJ) && isGoodSymbole(i,j,lastI,lastJ)) {
 			//System.out.println("stopDD : i=" + i + "-j=" + j + " -> lastI=" + lastI + "-lastJ=" + lastJ+" -> vLastJ=" + vLastI + "-vLastJ" + vLastJ);
 	        //System.out.println("stopDD : " + i + "-" + j + " -> " + lastI + "-" + lastJ);
-	        
+			
 	        this.lst.add(ch);
 	        this.ch = new Chemin();
-	        this.nombrePaire --;
+	        if(initPaire == false) {
+	        	 this.nombrePaire --;
+	        }
+	       
 	        
 	        setChanged();
 	        
