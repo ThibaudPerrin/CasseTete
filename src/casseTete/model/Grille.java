@@ -377,7 +377,7 @@ public class Grille extends Observable {
 			this.tab[lI][lJ].setLien(Lien.TRAITHORIZONTAL);
 		}else if(lI-vLI == 1 && lI-i == 0 && lJ - vLJ == 0 && lJ- j == -1 ){
 			this.tab[i][j].setLien(Lien.TRAITVERTICAL);
-			this.tab[lI][lJ].setLien(Lien.ANGLESUPDROIT);
+			this.tab[lI][lJ].setLien(Lien.ANGLESUPDROIT); 
 		}else if(lI-vLI == -1 && lI-i == 0 && lJ - vLJ == 0 && lJ- j == 1 ){
 			this.tab[i][j].setLien(Lien.TRAITVERTICAL);
 			this.tab[lI][lJ].setLien(Lien.ANGLEINFGAUCHE);

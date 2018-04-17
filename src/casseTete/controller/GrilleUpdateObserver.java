@@ -25,6 +25,7 @@ public class GrilleUpdateObserver implements Observer{
 	private Stage primaryStage;
 	private Partie partie;
 	private GrilleGPane gPane;
+	public int niveau;
 
 	public GrilleUpdateObserver(Stage primaryStage, Partie partie, GrilleGPane gPane) {
 		super();
@@ -60,7 +61,9 @@ public class GrilleUpdateObserver implements Observer{
 	
 	public void popUpFin() {
 		Button btn = new Button();
-	    btn.setText("nouvelle Partie");
+	    btn.setText("Continuer");
+	    Button btn3= new Button();
+	    btn3.setText("recommencer Partie");
 	    Button btn2 = new Button();
 	    btn2.setText("Quitter");
 	    GridPane gp = new GridPane();
@@ -72,6 +75,7 @@ public class GrilleUpdateObserver implements Observer{
 	    
 	    gp.add(btn, 0, 0);
 	    gp.add(btn2, 1, 0);
+	    gp.add(btn3, 2, 0);
 	    btn.setOnAction(new EventHandler<ActionEvent>() {
 		
 		    @Override
@@ -79,15 +83,28 @@ public class GrilleUpdateObserver implements Observer{
 		    	NouvellePartieEventH n = new NouvellePartieEventH(primaryStage, partie, gPane);
 		    	n.handle(event);
 		    	dialog.hide();
+		    	partie.nextNiv();
+		    	System.out.println(partie.niveau);
 		    }
 	    });
 	    btn2.setOnAction(new EventHandler<ActionEvent>() {
 		
 		    @Override
 		    public void handle(ActionEvent event) {
+		    	partie.resetNiv();
 		        System.exit(0);
 		    }
 		});
+	    
+	    btn3.setOnAction(new EventHandler<ActionEvent>() {
+	    	@Override
+	    	public void handle (ActionEvent event) {
+	    		NouvellePartieEventH n=new NouvellePartieEventH(primaryStage , partie , gPane);
+	    		n.handle(event);
+	    		dialog.hide();
+	    		partie.resetNiv();
+	    	}
+	    });
 	    
 	    
 		 

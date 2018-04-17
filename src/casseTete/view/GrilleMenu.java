@@ -39,7 +39,10 @@ public class GrilleMenu extends MenuBar{
 		 // Create menus
         Menu fileMenu = new Menu("File");
         //Menu editMenu = new Menu("Edit");
+        Menu lvlMenu =  new Menu("Niveau");
+        //Menu gestion des niveaux;
         Menu helpMenu = new Menu("Help");
+        
         
      // Create MenuItems
         MenuItem newGame = new MenuItem("Nouvelle Partie");
@@ -51,10 +54,15 @@ public class GrilleMenu extends MenuBar{
         
         MenuItem reglesJeu = new MenuItem("Regles du jeu");
         
+        MenuItem lvlfacile = new MenuItem("Facile");
+        MenuItem lvlnorm = new MenuItem("Normal");
+        
         fileMenu.getItems().addAll(newGame, exitGame);
         //editMenu.getItems().addAll(copyItem, pasteItem);
         
         helpMenu.getItems().addAll(reglesJeu);
+        
+        lvlMenu.getItems().addAll(lvlfacile , lvlnorm);
         
 
 		//When user click on the Exit item.
@@ -78,7 +86,9 @@ public class GrilleMenu extends MenuBar{
 			
 
      	// Add Menus to the MenuBar
-        getMenus().addAll(fileMenu, helpMenu);
+        getMenus().addAll(fileMenu, helpMenu , lvlMenu);
+        
+        
         
       
         

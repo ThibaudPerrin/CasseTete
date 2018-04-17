@@ -1,8 +1,10 @@
 package casseTete.model;
 
 public class Partie {
-	private static int MAX = 8;
-	private static int MIN = 5;
+	private static int MAXFAC = 8;
+	private static int MINFAC = 5;
+	public int niveau = 0;
+
 	
 	private Grille grille;
 	
@@ -11,11 +13,21 @@ public class Partie {
 	}
 	
 	public void nouvelleParti() {
-		int Longueur = MIN + (int)(Math.random() * ((MAX - MIN) + 1));
-		int Largeur = MIN + (int)(Math.random() * ((MAX - MIN) + 1));
+		int Longueur = MINFAC + (int)(Math.random() * ((MAXFAC - MINFAC) + 1));
+		int Largeur = MINFAC + (int)(Math.random() * ((MAXFAC - MINFAC) + 1));
 		System.out.println("largeur="+Largeur+" longueur="+Longueur);
 		grille = new Grille(Longueur, Largeur);
 		//grille = new Grille(8, 8);
+	}
+	
+	
+	
+	public void nextNiv() {
+		niveau=niveau+1;
+	}
+	
+	public void resetNiv() {
+		niveau = 0;
 	}
 
 	public Grille getGrille() {
