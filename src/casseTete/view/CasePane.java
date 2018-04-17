@@ -43,7 +43,7 @@ public class CasePane extends Pane {
 		Image image;
 		if(c.getLien() == Lien.CASEVIDE) {
 			image = new Image("File:image/../"+c.getSymb()+".png");
-		}else if(c.getLien() != Lien.CASEVIDE && c.getSymb() != Symbole.VIDE){
+		}else if(c.getLien() != Lien.CASEVIDE  && c.getSymb() != Symbole.VIDE){
 			image = new Image("File:image/../"+c.getSymb()+".png");
 		}else {
 			image = new Image("File:image/../"+c.getLien()+".png");
